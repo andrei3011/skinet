@@ -14,7 +14,7 @@ public static class SwaggerServiceExtensions
         return services;
     }
 
-    public static IApplicationBuilder UseSwaggerDocumentaion(this IApplicationBuilder app)
+    public static IApplicationBuilder UseSwaggerDocumentation(this IApplicationBuilder app)
     {
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));

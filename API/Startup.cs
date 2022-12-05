@@ -3,6 +3,7 @@ using API.Helpers;
 using API.Middleware;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 namespace API;
 
@@ -21,6 +22,11 @@ public class Startup
         services.AddControllers();
         services.AddDbContext<StoreContext>(x =>
            x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+        services.AddSingleton<IConnectionMultiplexer>(c =>
+        {
+            var configuration = ConfigurationOptions.Parse(_config.GetConnectionString("Redis"), true);
+            return ConnectionMultiplexer.Connect(configuration);
+        });
         services.AddApplicationServices();
         services.AddSwaggerDocumentation();
         services.AddCors(opt =>
@@ -36,7 +42,7 @@ public class Startup
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.UseMiddleware<ExceptionMiddleware>();
-        app.UseSwaggerDocumentaion();
+        app.UseSwaggerDocumentation();
 
         // if (env.IsDevelopment())
         // {
